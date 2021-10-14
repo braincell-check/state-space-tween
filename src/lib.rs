@@ -1,4 +1,3 @@
-#![doc = include_str!("../README.md")]
 #![deny(unsafe_code)]
 #![warn(
     clippy::all,
@@ -64,3 +63,6 @@
     nonstandard_style,
     rust_2018_idioms
 )]
+
+pub mod anim;
+pub mod vector;
