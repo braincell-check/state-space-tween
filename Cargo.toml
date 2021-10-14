@@ -17,3 +17,4 @@ categories = []
 [dependencies]
 num-traits = "^0.2"
 flo_curves = "^0.5"
+chrono = "^0.4"

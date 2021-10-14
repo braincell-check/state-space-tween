@@ -4,9 +4,34 @@ use std::ops::{Add, Mul, Sub};
 
 /// A fully-generic N-dimensional vector, where no implementation details are known.
 #[derive(Debug, PartialEq, Clone, Copy)]
-pub(crate) struct VectorND<Prim, const SIZE: usize>([Prim; SIZE])
+pub(crate) struct VectorND<Prim, const SIZE: usize>(pub [Prim; SIZE])
 where
     Prim: Float + Into<f64>;
+
+impl<Prim, const SIZE: usize> From<&[Prim]> for VectorND<Prim, SIZE>
+where
+    Prim: Float + Into<f64>,
+{
+    fn from(values: &[Prim]) -> Self {
+        assert_eq!(values.len(), SIZE);
+        Self::from_components(
+            values
+                .iter()
+                .map(|x| (*x).into())
+                .collect::<Vec<f64>>()
+                .as_slice(),
+        )
+    }
+}
+
+impl<Prim, const SIZE: usize> Into<[Prim; SIZE]> for VectorND<Prim, SIZE>
+where
+    Prim: Float + Into<f64>,
+{
+    fn into(self) -> [Prim; SIZE] {
+        self.0
+    }
+}
 
 impl<Prim, const SIZE: usize> Add for VectorND<Prim, SIZE>
 where
@@ -52,7 +77,7 @@ where
         Self::from_components(
             self.0
                 .iter()
-                .map(|a| rhs * a.to_f64().unwrap())
+                .map(|a| rhs * (*a).into())
                 .collect::<Vec<f64>>()
                 .as_slice(),
         )
